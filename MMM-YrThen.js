@@ -241,97 +241,99 @@ if (this.config.showAll == true) {
 
 
 // SHOWING DAILY FORECAST
-        else{
-            var numShown = 0;
-            for (var f in this.dataFromYr) {
-                var newData = this.dataFromYr[f];
-                var checkTime = moment(newData.start).format("HH");
-
-                var show = false;
-                if(f < this.config.numDetails && this.config.details == true) show = true;
-                if(checkTime > 11 && checkTime < 15) show = true;
-                if(numShown >= this.config.numDays) show = false;
-                if(show == true){
-                    numShown = numShown + 1;
-                    var row = document.createElement('tr');
-                    table.appendChild(row);
-
-                    var dayCell = document.createElement("td");
-                    dayCell.className = "yrthen-day align-left";
-                    if(f < this.config.numDetails && this.config.details == true) dayCell.innerHTML = moment(newData.start).format("ddd HH:mm");
-                    else dayCell.innerHTML = moment(newData.start).format("dddd");
-                    row.appendChild(dayCell);
-
-                    var iconCell = document.createElement("td");
-                    iconCell.className = "yrthen-icon-cell";
-                    row.appendChild(iconCell);
-
-                    var icon = document.createElement("img");
-                    icon.className = "yrthen-icon ";
-                    icon.width = "40";
-                    var weatherSymbol = this.calculateWeatherSymbolId(newData.symbol);
-                    icon.src = this.file(printf('images/%s.svg', weatherSymbol));
-                    iconCell.appendChild(icon);
-        
-                    var maxTempCell = document.createElement("td");
-                    if(this.config.roundTemp){
-                        tempValue = this.round(newData.temperature.value, 0);
-                        maxValue = this.round(newData.temperature.max, 0);
-                        minValue = this.round(newData.temperature.min, 0);
-                    }
-                    else{
-                        tempValue = this.round(newData.temperature.value, 1);
-                        maxValue = this.round(newData.temperature.max, 1);
-                        minValue = this.round(newData.temperature.min, 1);
-                    }
-
-                    if(this.config.showMaxMin){
-                        if(newData.temperature.min && newData.temperature.max) maxTempCell.innerHTML = minValue + '˚' + this.config.maxMinSeparator + maxValue + '˚';
-                        else maxTempCell.innerHTML = tempValue;
-                    }
-                    else{
+    else {
+        var numShown = 0;
+        for (var f in this.dataFromYr) {
+            var newData = this.dataFromYr[f];
+            var checkTime = moment(newData.start).format("HH");
+    
+            var show = false;
+            if (f < this.config.numDetails && this.config.details === true) show = true;
+            if (checkTime > 11 && checkTime < 15) show = true;
+            if (numShown >= this.config.numDays) show = false;
+            if (show === true) {
+                numShown = numShown + 1;
+                var row = document.createElement('tr');
+                table.appendChild(row);
+    
+                var dayCell = document.createElement("td");
+                dayCell.className = "yrthen-day align-left";
+                if (f < this.config.numDetails && this.config.details === true) {
+                    dayCell.innerHTML = moment(newData.start).format("ddd HH:mm");
+                } else {
+                    dayCell.innerHTML = moment(newData.start).format("dddd");
+                }
+                row.appendChild(dayCell);
+    
+                var iconCell = document.createElement("td");
+                iconCell.className = "yrthen-icon-cell";
+                row.appendChild(iconCell);
+    
+                var icon = document.createElement("img");
+                icon.className = "yrthen-icon ";
+                icon.width = "40";
+                var weatherSymbol = this.calculateWeatherSymbolId(newData.symbol);
+                icon.src = this.file(printf('images/%s.svg', weatherSymbol));
+                iconCell.appendChild(icon);
+    
+                var maxTempCell = document.createElement("td");
+                if (this.config.roundTemp) {
+                    tempValue = this.round(newData.temperature.value, 0);
+                    maxValue = this.round(newData.temperature.max, 0);
+                    minValue = this.round(newData.temperature.min, 0);
+                } else {
+                    tempValue = this.round(newData.temperature.value, 1);
+                    maxValue = this.round(newData.temperature.max, 1);
+                    minValue = this.round(newData.temperature.min, 1);
+                }
+    
+                if (this.config.showMaxMin) {
+                    if (newData.temperature.min && newData.temperature.max) {
+                        maxTempCell.innerHTML = minValue + '˚' + this.config.maxMinSeparator + maxValue + '˚';
+                    } else {
                         maxTempCell.innerHTML = tempValue;
                     }
-                    maxTempCell.className = "align-right bright yrthen-temp " + this.config.size;
-                    row.appendChild(maxTempCell);
-
-                    var minTempCell = document.createElement("td");
-                    minTempCell.innerHTML = this.round(newData.precipitation.value, 1);
-                    minTempCell.className = "align-right yrthen-prec dimmed";
-                    row.appendChild(minTempCell);
-
-                    if(this.config.windShow){
-                        windValue = '';
-                        var windCell = document.createElement("td");
-                        windCell.className = "align-left yrthen-wind dimmed " + this.config.windSize;
-                        if(this.config.windText){
-                            windValue += this.calculateWindSpeed(newData.wind.speed) + ' ';
-                            if(this.config.windTextNumber){
-                                if(this.config.windTextNewLine) windValue += '<br>';
-                                windValue += newData.wind.speed;
-                                if(this.config.windUnit) windValue += ' ' + this.config.windUnit;
-                                windValue += ' ';
-                            } 
+                } else {
+                    maxTempCell.innerHTML = tempValue;
+                }
+                maxTempCell.className = "align-right bright yrthen-temp " + this.config.size;
+                row.appendChild(maxTempCell);
+    
+                var minTempCell = document.createElement("td");
+                minTempCell.innerHTML = this.round(newData.precipitation.value, 1);
+                minTempCell.className = "align-right yrthen-prec dimmed";
+                row.appendChild(minTempCell);
+    
+                if (this.config.windShow) {
+                    var windValue = '';
+                    var windCell = document.createElement("td");
+                    windCell.className = "align-left yrthen-wind dimmed " + this.config.windSize;
+                    if (this.config.windText) {
+                        windValue += this.calculateWindSpeed(newData.wind.speed) + ' ';
+                        if (this.config.windTextNumber) {
+                            if (this.config.windTextNewLine) windValue += '<br>';
+                            windValue += newData.wind.speed;
+                            if (this.config.windUnit) windValue += ' ' + this.config.windUnit;
+                            windValue += ' ';
                         }
-                        else{
-                            windValue += newData.wind.speed + ' ';
-                            if(this.config.windUnit != false) windValue += this.config.windUnit + ' ';                            
-                        }
-                        if(this.config.windUnit != false) windValue += this.config.windUnit + ' ';
-                        windValue += this.translate(this.calculateWindDirection(newData.wind.direction));
-                        if(this.config.windGust && newData.wind.gust) windValue += ' (' + newData.wind.gust + ' ' + this.translate("gust") + ') ';
-                        windCell.innerHTML += windValue;
-                        row.appendChild(windCell);
+                    } else {
+                        windValue += newData.wind.speed + ' ';
+                        if (this.config.windUnit !== false) windValue += this.config.windUnit + ' ';
                     }
+                    if (this.config.windUnit !== false) windValue += this.config.windUnit + ' ';
+                    windValue += this.translate(this.calculateWindDirection(newData.wind.direction));
+                    if (this.config.windGust && newData.wind.gust) windValue += ' (' + newData.wind.gust + ' ' + this.translate("gust") + ') ';
+                    windCell.innerHTML += windValue;
+                    row.appendChild(windCell);
                 }
             }
         }
-
-
-        wrapper.appendChild(table);
-        this.loaded = true;
-        return wrapper;
-    },
+    }
+    
+    wrapper.appendChild(table);
+    this.loaded = true;
+    return wrapper;
+  },
 
     updateForecast: function() {
         Log.info('Updating forecast now');
