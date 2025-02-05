@@ -73,7 +73,15 @@ Module.register('MMM-YrThen', {
         return tempV.toFixed(precision);
     },
 
-    getDom: function() {
+    // NEW FUNCTION: Map time to appropriate time slot
+    calculateTimeSlot: function(hour) {
+        if (hour >= 0 && hour < 6) return this.translate("night");
+        else if (hour >= 6 && hour < 12) return this.translate("morning");
+        else if (hour >= 12 && hour < 18) return this.translate("afternoon");
+        else return this.translate("evening");
+    },
+
+    getDom: function() {
         var wrapper = document.createElement('div');
         if(!this.loaded){
             wrapper.innerHTML = this.translate('loading');
